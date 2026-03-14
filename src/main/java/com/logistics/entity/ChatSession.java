@@ -1,0 +1,24 @@
+package com.logistics.entity;
+
+import com.baomidou.mybatisplus.annotation.*;
+import lombok.Data;
+import java.time.LocalDateTime;
+
+@Data
+@TableName("chat_session")
+public class ChatSession {
+    
+    @TableId(type = IdType.AUTO)
+    private Long id;
+    
+    private Long userId;
+    
+    private String sessionId;
+    
+    private String role; // user, assistant
+    
+    private String content;
+    
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
+}

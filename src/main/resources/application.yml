@@ -1,0 +1,92 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: logistics-admin
+  
+  # MSSQL 配置
+  datasource:
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    url: jdbc:sqlserver://localhost:1433;DatabaseName=logistics;encrypt=false;trustServerCertificate=true
+    username: sa
+    password: your_password
+  
+  # PostgreSQL 配置（向量存储）
+  postgres:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/logistics_vector
+    username: postgres
+    password: your_password
+  
+  # Redis 配置
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password: your_password
+      database: 0
+
+# MyBatis Plus 配置
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: com.logistics.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+# 钉钉配置
+dingtalk:
+  appKey: your_app_key
+  appSecret: your_app_secret
+  agentId: your_agent_id
+
+# 快递100配置
+kuaidi100:
+  customer: your_customer
+  key: your_key
+  secret: your_secret
+
+# 百度地图配置
+baidu:
+  map:
+    ak: your_ak
+    sk: your_sk
+
+# 金蝶ERP配置
+kingdee:
+  api:
+    url: http://your-kingdee-server/k3cloud
+    appId: your_app_id
+    appSecret: your_app_secret
+
+# LLM 配置
+llm:
+  baseUrl: https://api.scnet.cn/api/llm/v1
+  apiKey: your_api_key
+  model: MiniMax-M2.5
+
+# Embedding 配置
+embedding:
+  baseUrl: https://api.scnet.cn/api/llm/v1
+  apiKey: your_api_key
+  model: jina-embeddings-v2
+
+# 文件上传配置
+file:
+  upload:
+    path: /tmp/logistics-upload
+    max-size: 10MB
+
+# 日志配置
+logging:
+  level:
+    com.logistics: debug
+  file:
+    path: /tmp/logistics-logs
