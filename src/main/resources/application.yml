@@ -13,9 +13,9 @@ spring:
     password: your_password
   
   # PostgreSQL 配置（向量存储）
-  postgres:
+  datasource-postgres:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/logistics_vector
+    url: jdbc:postgresql://localhost:5432/logistics_vector?options=-c%20search_path=public
     username: postgres
     password: your_password
   
@@ -65,6 +65,7 @@ kingdee:
     url: http://your-kingdee-server/k3cloud
     appId: your_app_id
     appSecret: your_app_secret
+    dcId: your_dc_id
 
 # LLM 配置
 llm:

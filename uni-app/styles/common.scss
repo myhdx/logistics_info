@@ -1,0 +1,74 @@
+/* 全局公共样式 */
+
+page {
+  background-color: #F5F5F5;
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+  font-size: 14px;
+  color: #333333;
+}
+
+/* 卡片样式 */
+.card {
+  background: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin: 12px;
+  padding: 16px;
+}
+
+/* 主按钮 */
+.btn-primary {
+  background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+  color: #FFFFFF;
+  border-radius: 8px;
+  padding: 12px 24px;
+  text-align: center;
+  font-size: 16px;
+  border: none;
+  
+  &:active {
+    opacity: 0.9;
+  }
+}
+
+/* 标题栏渐变 */
+.header-gradient {
+  background: linear-gradient(135deg, #E8F4FD 0%, #4A90E2 100%);
+}
+
+/* 文字颜色 */
+.text-main { color: #333333; }
+.text-sub { color: #666666; }
+.text-light { color: #999999; }
+.text-primary { color: #4A90E2; }
+
+/* 蓝色圆点指示 */
+.blue-dot {
+  width: 8px;
+  height: 8px;
+  background: #4A90E2;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+/* 弹性布局 */
+.flex { display: flex; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.flex-between { display: flex; align-items: center; justify-content: space-between; }
+.flex-column { display: flex; flex-direction: column; }
+
+/* 文字省略 */
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ellipsis-2 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -30,6 +30,7 @@ public class KnowledgeService {
 
     private final KnowledgeDocumentMapper documentMapper;
     private final KnowledgeChunkMapper chunkMapper;
+    private final EmbeddingService embeddingService;
 
     @Value("${file.upload.path:/tmp/logistics-upload}")
     private String uploadPath;
@@ -89,11 +90,18 @@ public class KnowledgeService {
         // 分段
         List<String> chunks = splitIntoChunks(content);
         
-        // 保存段落
+        // 保存段落并生成向量
         for (String chunk : chunks) {
             KnowledgeChunk knowledgeChunk = new KnowledgeChunk();
             knowledgeChunk.setDocId(doc.getId());
             knowledgeChunk.setContent(chunk);
+            
+            // 生成向量并存储
+            float[] embedding = embeddingService.embed(chunk);
+            if (embedding != null) {
+                knowledgeChunk.setEmbedding(arrayToString(embedding));
+            }
+            
             knowledgeChunk.setCreateTime(LocalDateTime.now());
             chunkMapper.insert(knowledgeChunk);
         }
@@ -138,12 +146,34 @@ public class KnowledgeService {
      * 向量检索相关段落
      */
     public List<KnowledgeChunk> searchRelated(String query, int topK) {
-        // TODO: 调用Embedding服务向量化查询，再使用pgvector相似度搜索
-        // 简化版：直接返回最近的段落
+        // 1. 将查询向量化
+        float[] queryEmbedding = embeddingService.embed(query);
+        if (queryEmbedding == null) {
+            log.warn("查询向量化失败，返回空结果");
+            return new ArrayList<>();
+        }
+        
+        String queryVectorStr = arrayToString(queryEmbedding);
+        
+        // 2. 使用 pgvector 相似度搜索（余弦相似度）
+        // PostgreSQL + pgvector: ORDER BY embedding <=> '[向量]' LIMIT topK
         return chunkMapper.selectList(
             new LambdaQueryWrapper<KnowledgeChunk>()
-                .orderByDesc(KnowledgeChunk::getCreateTime)
-                .last("LIMIT " + topK)
+                .isNotNull(KnowledgeChunk::getEmbedding)
+                .last("ORDER BY embedding <=> '" + queryVectorStr + "' LIMIT " + topK)
         );
+    }
+    
+    /**
+     * float数组转字符串存储
+     */
+    private String arrayToString(float[] arr) {
+        StringBuilder sb = new StringBuilder("[");
+        for (int i = 0; i < arr.length; i++) {
+            if (i > 0) sb.append(",");
+            sb.append(arr[i]);
+        }
+        sb.append("]");
+        return sb.toString();
     }
 }
